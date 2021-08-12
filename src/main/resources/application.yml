@@ -1,0 +1,41 @@
+# DataSource Config
+spring:
+  #配置数据源
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/blog?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    #有密码输入密码，没密码为空
+#    password: huixiao612731
+    password:
+  #使字符串输出更美观
+  jackson:
+    serialization:
+      indent-output: true
+  mvc:
+    dispatch-options-request: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+mybatis-plus:
+  #配置mapper地址
+  mapper-locations: classpath*:/mapper/**Mapper.xml
+
+server:
+  #配置端口号
+  port: 8088
+  servlet:
+    session:
+      timeout: 1
+
+#密钥的有效性说明
+markerhub:
+  jwt:
+    #加密密钥
+    secret: f4e2e52034348f86b67cde581c0f9eb5
+    #token有效期7天，单位，秒
+    expire: 604800
+    #头部获取
+    header: Authorization

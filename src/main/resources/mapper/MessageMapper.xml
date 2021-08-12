@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.blog.mapper.MessageMapper">
+
+    <resultMap id="BlogMessageMap" type="com.project.blog.packag.BlogMessage" >
+        <id column="id" property="id" />
+        <result column="content" property="content" />
+        <result column="time" property="time"  />
+        <result column="Icon" property="authorIcon" />
+        <result column="name" property="authorName"  />
+    </resultMap>
+
+    <select id="getBlogMessageList" resultMap="BlogMessageMap">
+      SELECT
+		message.*,
+		`user`.Icon,
+		`user`.`name`
+        FROM
+        message
+        LEFT JOIN (`user` )
+		ON message.authorId = `user`.id
+		ORDER BY message.time desc
+    </select>
+</mapper>

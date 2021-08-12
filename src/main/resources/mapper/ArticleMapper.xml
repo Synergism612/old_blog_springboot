@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.blog.mapper.ArticleMapper">
+
+    <resultMap id="ArticleListResultMap" type="com.project.blog.packag.BlogArticle" >
+        <id column="id" property="id" />
+        <result column="cover" property="cover" />
+        <result column="title" property="title"  />
+        <result column="summarize" property="summarize"  />
+        <result column="content" property="content" />
+        <result column="time" property="time"  />
+        <result column="lasttime" property="lasttime"  />
+        <result column="author" property="author" />
+        <result column="ViewsNumber" property="ViewsNumber"  />
+        <collection property="commentList" ofType="com.project.blog.entity.Comment">
+            <id column="comment_id" property="id"  />
+            <result column="comment_authorId" property="authorId"  />
+            <result column="comment_content" property="content" />
+            <result column="comment_time" property="time" />
+            <result column="comment_articleId" property="articleId"  />
+        </collection>
+        <collection property="tagList" ofType="com.project.blog.entity.Tag">
+            <id column="tag_id" property="id"  />
+            <result column="tag_name" property="name" />
+            <result column="tag_articleId" property="articleId"  />
+        </collection>
+        <collection property="typeList" ofType="com.project.blog.entity.Type">
+            <id column="type_id" property="id" />
+            <result column="type_content" property="content" />
+            <result column="type_articleId" property="articleId"  />
+        </collection>
+        <collection property="likeNameList" ofType="java.lang.String">
+            <result column="like_Name" property="name" />
+        </collection>
+    </resultMap>
+
+    <select id="getArticleList" resultMap="ArticleListResultMap">
+       SELECT
+        article.*,
+        comment.id as comment_id,
+        comment.authorId as comment_authorId,
+        comment.content as comment_content,
+        comment.time as comment_time,
+        comment.articleId as comment_articleId,
+        tag.id as tag_id,
+        tag.name as tag_name,
+        tag.articleId as tag_articleId,
+        type.id as type_id,
+        type.content as type_content,
+        type.articleId as type_articleId,
+		`user`.`name` as like_Name
+        FROM
+        article
+        LEFT JOIN (comment,tag,type,`like`,`user`)
+		ON article.id = comment.articleId
+		AND article.id = tag.articleId
+		AND article.id = type.articleId
+		AND article.id = `like`.articleId
+		AND `like`.authorId = `user`.id
+		ORDER BY article.time desc
+    </select>
+
+    <select id="getArticleById"  resultMap="ArticleListResultMap">
+        SELECT
+        article.*,
+        comment.id as comment_id,
+        comment.authorId as comment_authorId,
+        comment.content as comment_content,
+        comment.time as comment_time,
+        comment.articleId as comment_articleId,
+        tag.id as tag_id,
+        tag.name as tag_name,
+        tag.articleId as tag_articleId,
+        type.id as type_id,
+        type.content as type_content,
+        type.articleId as type_articleId,
+		`user`.`name` as like_Name
+        FROM
+        article
+        LEFT JOIN (comment,tag,type,`like`,`user`)
+		ON article.id = comment.articleId
+		AND article.id = tag.articleId
+		AND article.id = type.articleId
+		AND article.id = `like`.articleId
+		AND `like`.authorId = `user`.id
+		WHERE article.id = #{articleId}
+		ORDER BY article.time desc
+    </select>
+
+    <select id="getArticleListGroupByTime"  resultMap="ArticleListResultMap">
+        SELECT
+        article.*,
+        comment.id as comment_id,
+        comment.authorId as comment_authorId,
+        comment.content as comment_content,
+        comment.time as comment_time,
+        comment.articleId as comment_articleId,
+        tag.id as tag_id,
+        tag.name as tag_name,
+        tag.articleId as tag_articleId,
+        type.id as type_id,
+        type.content as type_content,
+        type.articleId as type_articleId,
+		`user`.`name` as like_Name
+        FROM
+        article
+        LEFT JOIN (comment,tag,type,`like`,`user`)
+		ON article.id = comment.articleId
+		AND article.id = tag.articleId
+		AND article.id = type.articleId
+		AND article.id = `like`.articleId
+		AND `like`.authorId = `user`.id
+		WHERE article.time between #{startTime} and #{stopTime}
+		ORDER BY article.time desc
+    </select>
+
+    <select id="getArticleListLike"  resultMap="ArticleListResultMap">
+        SELECT
+        article.*,
+        comment.id as comment_id,
+        comment.authorId as comment_authorId,
+        comment.content as comment_content,
+        comment.time as comment_time,
+        comment.articleId as comment_articleId,
+        tag.id as tag_id,
+        tag.name as tag_name,
+        tag.articleId as tag_articleId,
+        type.id as type_id,
+        type.content as type_content,
+        type.articleId as type_articleId,
+		`user`.`name` as like_Name
+        FROM
+        article
+        LEFT JOIN (comment,tag,type,`like`,`user`)
+		ON article.id = comment.articleId
+		AND article.id = tag.articleId
+		AND article.id = type.articleId
+		AND article.id = `like`.articleId
+		AND `like`.authorId = `user`.id
+		WHERE article.time between #{startTime} and #{stopTime}
+		ORDER BY article.time desc
+    </select>
+
+</mapper>
